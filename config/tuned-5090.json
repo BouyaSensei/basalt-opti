@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "models": [
+    {
+      "model": "E:/ia/Basalt/models/IQ2_XS/Qwen3.8-FN-UD-IQ2_XS.basalt",
+      "gpu": "0",
+      "kv": "int8",
+      "max-context": 16384
+    }
+  ],
+  "engine": {
+    "resident-experts": true,
+    "expert-cache": "auto",
+    "vram-reserve-mib": 256,
+    "ram-reserve-mib": 4096
+  },
+  "server": { "host": "127.0.0.1", "port": 8080 }
+}

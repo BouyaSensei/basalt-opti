@@ -79,6 +79,12 @@ struct CommonOptions {
     bool stop_eos = false;
     /// --ram-reserve-mib: the RAM left free for the rest of the system (platform::ram_reserve); 0 turns the guard off.
     int64_t ram_reserve_mib = (int64_t) (basalt::platform::kDefaultRamReserveBytes >> 20);
+    /// --stall-limit N: seconds a served request may go without a progress beat before the engine ends itself
+    /// (the watchdog in serve/protocol.cpp).  60 by default, as upstream: one step takes seconds.  0 turns the
+    /// watchdog off.  A box that streams experts from a slow drive can sit in disk reads for over a minute: the
+    /// request is slow, not stuck, and 60 s kills a healthy engine.  The request's own 30 s RAM-guard wait is
+    /// separate; this flag changes no rounding.
+    int stall_limit = 60;
     std::vector<int64_t> eos_ids;
     /// --gpu: the cards this run uses (gpu_select.hpp); empty = GPU 0 alone.  --gpu-plan prints the choice and exits.
     std::string gpu;

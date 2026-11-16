@@ -311,9 +311,11 @@ int Runtime::announce() {
     // a request whose heartbeat (tokens, prompt chunks, verify windows) stops for this long is stuck on a flag nobody
     // will raise - end the engine with where it was, so the server starts it again instead of the GPU spinning
     // forever.  Before it does, it reports what every part was doing (stall_report), so one occurrence says where
-    // the wait is.
+    // the wait is.  `--stall-limit` moves the limit: on a box whose experts stream from a drive slower than the
+    // decode wants them, a window of disk reads can pass a minute without a beat, and the 60 s default kills an
+    // engine that is only slow.  0 = the watchdog off.
     {
-        const int limit = 60;   // one step (a prompt layer, a verify window) takes seconds
+        const int limit = o.stall_limit;   // one step (a prompt layer, a verify window) takes seconds
         if (limit > 0)
             std::thread([limit] {
                 basalt::core::Progress& p = basalt::core::progress();

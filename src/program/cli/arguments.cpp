@@ -115,6 +115,16 @@ std::optional<int> parse_options(int argc, char** argv, CommonOptions& o, const 
             o.stop_eos = true;
         }
         else if (a == "--peer-reserve-mib") o.peer_reserve_mib = std::atoi(next("--peer-reserve-mib"));
+        else if (a == "--stall-limit") {
+            const std::string value = next("--stall-limit");
+            int64_t number = 0;
+            const auto result = std::from_chars(value.data(), value.data() + value.size(), number);
+            if (result.ec != std::errc{} || result.ptr != value.data() + value.size() || number < 0 || number > 3600) {
+                basalt::log::error("basalt", "--stall-limit needs a nonnegative integer of seconds, at most 3600");
+                return 2;
+            }
+            o.stall_limit = (int) number;
+        }
         else if (a == "--expert-profile") o.expert_profile = next("--expert-profile");
         else if (a == "--resident-budget-gib") {
             const double gib = std::atof(next("--resident-budget-gib"));

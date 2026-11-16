@@ -218,7 +218,10 @@ void usage() {
                  "  --resident-budget-gib N  the resident mode with at most N GiB of experts in RAM (hottest first;\n"
                  "                       auto when not set: what fits);\n"
                  "                       a budget that would leave less than the RAM floor free is refused, naming\n"
-                 "                       the largest safe value.\n", (long long) basalt::program::kDefaultContext);
+                 "                       the largest safe value.\n"
+                 "  --stall-limit N   seconds a served request goes without a progress beat before the engine ends\n"
+                 "                       itself (default 60; 0 = off). A drive that cannot keep up makes a request\n"
+                 "                       slow, not stuck: raise this on a box that streams its experts from disk.\n", (long long) basalt::program::kDefaultContext);
 }
 
 }  // namespace basalt::program::cli
